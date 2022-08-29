@@ -51,7 +51,11 @@ namespace LinqExercise
 
             Console.WriteLine();
             Console.WriteLine("Only 4 numbers: ");
-            numbers.Where(number => number < 4).OrderBy(number => number).ToList().ForEach(number => Console.WriteLine(number));
+            var fourNumbers = numbers.Where(number => number < 4).OrderBy(number => number).ToList();
+            foreach (var number in fourNumbers)
+            {
+                Console.WriteLine(number);
+            }
 
             //TODO: Change the value at index 4 to your age, then print the numbers in decsending order
 
@@ -66,33 +70,28 @@ namespace LinqExercise
             //TODO: Print all the employees' FullName properties to the console only if their FirstName starts with a C OR an S and order this in acesnding order by FirstName.
             Console.WriteLine();
             Console.WriteLine("All employee names that start with C or S: ");
-            employees.Where(employee => employee.FirstName.StartsWith("C")).OrderBy(employee => employee.FirstName).ToList().ForEach(number => Console.WriteLine(number.FullName));
-            employees.Where(employee => employee.FirstName.StartsWith("S")).OrderBy(employee => employee.FirstName).ToList().ForEach(number => Console.WriteLine(number.FullName));
+            employees.Where(employee => employee.FirstName.StartsWith("C") || employee.FirstName.StartsWith("S"))
+                .OrderBy(employee => employee.FirstName).ToList()
+                .ForEach(number => Console.WriteLine(number.FullName));
 
             //TODO: Print all the employees' FullName and Age who are over the age 26 to the console and order this by Age first and then by FirstName in the same result.
 
             Console.WriteLine();
-            Console.WriteLine("All employees over the age 26 sorted by age: ");
-            employees.Where(employee => employee.Age > 26).OrderBy(employee => employee.Age).ToList().ForEach(employee => Console.WriteLine($"Name: {employee.FullName} \nAge : {employee.Age}"));
-            Console.WriteLine();
-            Console.WriteLine("All employees over the age 26 sorted by first name: ");
-            employees.Where(employee => employee.Age > 26).OrderBy(employee => employee.FirstName).ToList().ForEach(employee => Console.WriteLine($"Name: {employee.FullName} \nAge : {employee.Age}"));
+            Console.WriteLine("All employees over the age 26 sorted by age then by first name: ");
+            employees.Where(employee => employee.Age > 26).OrderBy(employee => employee.Age)
+                .ThenBy(employee => employee.FirstName).ToList()
+                .ForEach(employee => Console.WriteLine($"Name: {employee.FullName} \nAge : {employee.Age}"));
+            
 
 
             //TODO: Print the Sum and then the Average of the employees' YearsOfExperience if their YOE is less than or equal to 10 AND Age is greater than 35
 
             Console.WriteLine();
-            var sortedEmployees = employees.Where(employee => employee.YearsOfExperience <= 10).Where(employee => employee.Age > 35).ToList();
-            var sum = 0;
-            foreach (var employee in sortedEmployees)
-            {
-                sum += employee.YearsOfExperience;
-            }
-            var averageYOE = sum / sortedEmployees.Count;
-            Console.WriteLine($"YOE SUM of employees who have less than 10 YOE and Age is greater than 35: {sum}");
+            var sortedEmployees = employees.Where(employee => employee.YearsOfExperience <= 10 && employee.Age > 35);
+            Console.WriteLine($"YOE SUM of employees who have less than 10 YOE and Age is greater than 35: {sortedEmployees.Sum(x => x.YearsOfExperience)}");
             Console.WriteLine();
 
-            Console.WriteLine($"YOE AVERAGE of employees who have less than 10 YOE and Age is greater than 35: {averageYOE}");
+            Console.WriteLine($"YOE AVERAGE of employees who have less than 10 YOE and Age is greater than 35: {sortedEmployees.Average(x => x.YearsOfExperience)}");
             Console.WriteLine();
 
             //TODO: Add an employee to the end of the list without using employees.Add()
@@ -112,7 +111,7 @@ namespace LinqExercise
                 LastName = "K",
                 Age = 24,
                 YearsOfExperience = 1
-            }).ToList().ForEach(employee => Console.WriteLine($"Full Name: {employee.FullName}"));
+            }).ToList().ForEach(employee => Console.WriteLine($"Full Name: {employee.FullName} \nAge: {employee.Age} \nYOE: {employee.YearsOfExperience}"));
         }
 
         #region CreateEmployeesMethod
